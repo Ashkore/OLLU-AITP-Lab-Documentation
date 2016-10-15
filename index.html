@@ -1,25 +1,36 @@
-<!DOCTYPE html>
-<html lang="en-us">
+<!doctype html>
+<html>
   <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>Ollu-cybersaints-lab-documentation by Ashkore</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
   </head>
   <body>
-    <section class="page-header">
-      <h1 class="project-name">Ollu-cybersaints-lab-documentation</h1>
-      <h2 class="project-tagline"></h2>
-      <a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation" class="btn">View on GitHub</a>
-      <a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+    <div class="wrapper">
+      <header>
+        <h1 class="header">Ollu-cybersaints-lab-documentation</h1>
+        <p class="header"></p>
 
-    <section class="main-content">
-      <h1>
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/Ashkore">Ashkore</a></p>
+
+
+      </header>
+      <section>
+        <h1>
 <a id="lab-hardware--layout" class="anchor" href="#lab-hardware--layout" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Lab Hardware / Layout</h1>
 
 <p>2 Unmanaged trednet gigabit switches
@@ -65,7 +76,9 @@ The DHCP/Apache2 server has 2 scripts on it:
 
 <p>Revert_Snapshots.sh</p>
 
-<pre><code>VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+<pre><code>#Get all vmid's where not the vcenter or the DHCP server
+VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+#loop though VMID's and check if there is a snapshot by the name of fresh install. If so, revert the vm to that snapshot and then power on the VM
 for VMID in $VMIDS
 do
         case $VMID in
@@ -85,7 +98,9 @@ done
 
 <p>Create_Snapshots.sh</p>
 
-<pre><code>VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+<pre><code>#Get all vmid's where not the vcenter or the DHCP server
+VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+#loop though VMID's and check if there is a snapshot by the name of fresh install. If not, take a snapshot called fresh install.
 for VMID in $VMIDS
 do
         case $VMID in
@@ -102,8 +117,10 @@ done
 
 <p>Script.sh</p>
 
-<pre><code>VMIDS=$(vim-cmd vmsvc/getallvms | awk '{print $1 }' | grep -v Vmid)
+<pre><code>#Get all vmid's
+VMIDS=$(vim-cmd vmsvc/getallvms | awk '{print $1 }' | grep -v Vmid)
 echo "" &gt; MAC_ADDRESSES
+#loop though VMID's and get the mac address and name of the vm. Add them to a file.
 for VMID in $VMIDS
 do
         case $VMID in
@@ -117,21 +134,77 @@ do
 done
 </code></pre>
 
+<p>crontab (/var/spool/cron/crontabs/root)</p>
+
+<pre><code>#Run every 5 minutes
+*/5 * * * * /root/script.sh
+#Run every Saturday at 5am
+* 5 * * 6/root/Create_Snapshots.sh
+#Run every Sunday at 5am
+* 5 * * 7/root/Revert_Snapshots.sh
+</code></pre>
+
 <h2>
 <a id="dhcpapache2" class="anchor" href="#dhcpapache2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>DHCP/Apache2</h2>
 
 <p>IP_TO_MAC.sh</p>
 
+<pre><code>#This script creates the HTML page to show the IP addresses and VMnames
+#make sure file is empty
+echo "" &gt; /root/iptomac
+#add the title html to file
+echo "&lt;title&gt;CyberSaints Vurnable IP's&lt;/title&gt;" &gt;&gt; /root/iptomac
+#add the text to file
+echo "&lt;i&gt;This webpage is updated every minute. If there are any issues, check the /root/order.log file. The scripts that create this page are in /root&lt;/i&gt;&lt;br&gt;&lt;br&gt;" &gt;&gt; /root/iptomac
+echo "If you are trying to pentest one of these IP's and are struggling, try a walkthough at www.vulnhub.com" &gt;&gt; /root/iptomac
+#Add table start to file
+echo "&lt;table&gt;" &gt;&gt; /root/iptomac
+#Add table headers to file
+echo "&lt;tr&gt;&lt;th&gt;VMname&lt;/th&gt;&lt;th&gt;Ipaddress&lt;/th&gt;&lt;/tr&gt;" &gt;&gt; /root/iptomac
+#loop through the DHCP file, compare the macs to the files in MAC. If they match, add a new row to the html file of IP/VMname
+while read line; do
+    MAC=$(echo $line | awk '{print $1}')
+    if grep -Rq $MAC /root/MAC
+    then
+        echo "&lt;tr&gt;&lt;td&gt;" &gt;&gt; /root/iptomac
+        echo $(grep -R $MAC /root/MAC | awk '{print $2}' &gt;&gt; /root/iptomac
+        echo "&lt;/td&gt;&lt;td&gt;" &gt;&gt; /root/iptomac
+        echo $line | awk '{print $2}') &gt;&gt; /root/iptomac
+        echo "&lt;/td&gt;&lt;/tr&gt;" &gt;&gt; /root/iptomac
+    fi
+done &lt;/root/DHCP
+echo "&lt;/table&gt;" &gt;&gt;/root/iptomac
+#Copy the file to the index.html file to be displayed to website
+cp /root/iptomac /var/www/html/index.html
+</code></pre>
+
 <p>Order.sh</p>
 
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation">Ollu-cybersaints-lab-documentation</a> is maintained by <a href="https://github.com/Ashkore">Ashkore</a>.</span>
+<pre><code>#Gets all of the IP's and Mac addresses that have been leased
+cat /var/lib/misc/dnsmasq.leases | awk '{print $2 " " $3}' &gt; /root/DHCP
+#obtains the Mac addresses from ESX4
+scp root@192.168.1.10:/MAC_ADDRESSES /root/MAC_ESX4
+#obtains the Mac addresses from ESX3
+scp root@192.168.1.9:/MAC_ADDRESSES /root/MAC_ESX3
+#obtains the Mac addresses from ESX2
+scp root@192.168.1.8:/MAC_ADDRESSES /root/MAC_ESX2
+#Combines all of the individual Mac Address files into one
+cat /root/MAC_ESX* &gt; /root/MAC
+#Runs the IP_TO_MAC script
+/root/IP_TO_MAC.sh
+</code></pre>
 
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+<p>crontab</p>
+
+<pre><code>#Runs every minute
+*/1 * * * * /root/order.sh &gt;&gt; /root/order.log
+</code></pre>
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
       </footer>
-
-    </section>
-
-  
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
   </body>
 </html>
