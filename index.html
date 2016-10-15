@@ -65,56 +65,56 @@ The DHCP/Apache2 server has 2 scripts on it:
 
 <p>Revert_Snapshots.sh</p>
 
-<pre><code>    VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
-    for VMID in $VMIDS
-    do
-            case $VMID in
-                    ''|*[!0-9]*);;
-                    *)
-                    vim-cmd vmsvc/get.snapshot $VMID | grep "Fresh Install"
-                    if [ $? -eq 0 ]; then
-                            echo $(vim-cmd vmsvc/get.summary $VMID | grep name)
-                            SnapShotID=$(vim-cmd vmsvc/snapshot.get $VMID | grep "Fresh Install" -A 1 | grep "Id" | awk '{print $4}')
-                            vim-cmd vmsvc/snapshot.revert $VMID $SnapShotID 0
-                            vim-cmd vmsvc/power.on $VMID
-                    fi
-                    ;;
-            esac
-    done
+<pre><code>VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+for VMID in $VMIDS
+do
+        case $VMID in
+                ''|*[!0-9]*);;
+                *)
+                vim-cmd vmsvc/get.snapshot $VMID | grep "Fresh Install"
+                if [ $? -eq 0 ]; then
+                        echo $(vim-cmd vmsvc/get.summary $VMID | grep name)
+                        SnapShotID=$(vim-cmd vmsvc/snapshot.get $VMID | grep "Fresh Install" -A 1 | grep "Id" | awk '{print $4}')
+                        vim-cmd vmsvc/snapshot.revert $VMID $SnapShotID 0
+                        vim-cmd vmsvc/power.on $VMID
+                fi
+                ;;
+        esac
+done
 </code></pre>
 
 <p>Create_Snapshots.sh</p>
 
-<pre><code>    VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
-    for VMID in $VMIDS
-    do
-            case $VMID in
-                    ''|*[!0-9]*);;
-                    *)
-                    vim-cmd vmsvc/get.snapshot $VMID | grep "Fresh Install" &gt; /dev/null
-                    if [ ! $? -eq 0 ]; then
-                            vim-cmd vmsvc/snapshot.create $VMID "Fresh Install"
-                    fi
-                    ;;
-            esac
-    done
+<pre><code>VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+for VMID in $VMIDS
+do
+        case $VMID in
+                ''|*[!0-9]*);;
+                *)
+                vim-cmd vmsvc/get.snapshot $VMID | grep "Fresh Install" &gt; /dev/null
+                if [ ! $? -eq 0 ]; then
+                        vim-cmd vmsvc/snapshot.create $VMID "Fresh Install"
+                fi
+                ;;
+        esac
+done
 </code></pre>
 
 <p>Script.sh</p>
 
-<pre><code>    VMIDS=$(vim-cmd vmsvc/getallvms | awk '{print $1 }' | grep -v Vmid)
-    echo "" &gt; MAC_ADDRESSES
-    for VMID in $VMIDS
-    do
-            case $VMID in
-                    ''|*[!0-9]*);;
-                    *)
-                    MacAddress=$(vim-cmd vmsvc/device.getdevices $VMID | grep macAddress | sed 's/macAddress = "//' | sed 's/",//' | sed -r 's/\s+//g')
-                    VmName=$(vim-cmd vmsvc/get.summary $VMID | grep name | sed 's/name = "//' | sed 's/",//' | sed -r 's/\s+//g')
-                    echo $MacAddress        $VmName &gt;&gt; MAC_ADDRESSES
-                    ;;
-            esac
-    done
+<pre><code>VMIDS=$(vim-cmd vmsvc/getallvms | awk '{print $1 }' | grep -v Vmid)
+echo "" &gt; MAC_ADDRESSES
+for VMID in $VMIDS
+do
+        case $VMID in
+                ''|*[!0-9]*);;
+                *)
+                MacAddress=$(vim-cmd vmsvc/device.getdevices $VMID | grep macAddress | sed 's/macAddress = "//' | sed 's/",//' | sed -r 's/\s+//g')
+                VmName=$(vim-cmd vmsvc/get.summary $VMID | grep name | sed 's/name = "//' | sed 's/",//' | sed -r 's/\s+//g')
+                echo $MacAddress        $VmName &gt;&gt; MAC_ADDRESSES
+                ;;
+        esac
+done
 </code></pre>
 
 <h2>
