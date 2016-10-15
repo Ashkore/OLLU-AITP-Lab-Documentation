@@ -63,8 +63,9 @@ The DHCP/Apache2 server has 2 scripts on it:
 <h2>
 <a id="esx" class="anchor" href="#esx" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ESX</h2>
 
-<p>Revert_Snapshots.sh
-<code>VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+<p>Revert_Snapshots.sh</p>
+
+<pre><code>    VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
     for VMID in $VMIDS
     do
             case $VMID in
@@ -80,9 +81,11 @@ The DHCP/Apache2 server has 2 scripts on it:
                     ;;
             esac
     done
-</code>
-Create_Snapshots.sh
-<code>VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
+</code></pre>
+
+<p>Create_Snapshots.sh</p>
+
+<pre><code>    VMIDS=$(vim-cmd vmsvc/getallvms | grep -v 01_Vcenter | grep -v 02_DNS_DHCP | awk '{print $1 }' | grep -v Vmid)
     for VMID in $VMIDS
     do
             case $VMID in
@@ -95,9 +98,11 @@ Create_Snapshots.sh
                     ;;
             esac
     done
-</code>
-Script.sh
-<code>VMIDS=$(vim-cmd vmsvc/getallvms | awk '{print $1 }' | grep -v Vmid)
+</code></pre>
+
+<p>Script.sh</p>
+
+<pre><code>    VMIDS=$(vim-cmd vmsvc/getallvms | awk '{print $1 }' | grep -v Vmid)
     echo "" &gt; MAC_ADDRESSES
     for VMID in $VMIDS
     do
@@ -110,7 +115,7 @@ Script.sh
                     ;;
             esac
     done
-</code></p>
+</code></pre>
 
 <h2>
 <a id="dhcpapache2" class="anchor" href="#dhcpapache2" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>DHCP/Apache2</h2>
