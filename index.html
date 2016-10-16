@@ -1,40 +1,28 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Ollu-cybersaints-lab-documentation : ">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Ollu-cybersaints-lab-documentation</title>
+    <meta charset="UTF-8">
+    <title>Ollu-cybersaints-lab-documentation by Ashkore</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Ollu-cybersaints-lab-documentation</h1>
+      <h2 class="project-tagline"></h2>
+      <a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation" class="btn">View on GitHub</a>
+      <a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation">View on GitHub</a>
-
-          <h1 id="project_title">Ollu-cybersaints-lab-documentation</h1>
-          <h2 id="project_tagline"></h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="lab-hardware--layout" class="anchor" href="#lab-hardware--layout" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Lab Hardware / Layout</h1>
 
-<p>2 Unmanaged trednet gigabit switches
+<p>2 Unmanaged trednet gigabit switches<br>
 2 Poweredge T300 Server</p>
 
 <pre><code>1 Intel Core 2 Duo E6305 @ 1.86GHz
@@ -55,22 +43,22 @@
 <h1>
 <a id="lab-software--layout" class="anchor" href="#lab-software--layout" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Lab Software / Layout</h1>
 
-<p>Each Poweredge server is running ESX 6.0
-A virtual Vcenter Server Appliance is running on the T605
-A virtual Debian DHCP/Apache2 server is running DNSMASQ
-The rest of the VM's are VM's from <a href="http://www.Vulnhub.com">www.Vulnhub.com</a></p>
+<p>Each Poweredge server is running ESX 6.0<br>
+A virtual Vcenter Server Appliance is running on the T605<br>
+A virtual Debian DHCP/Apache2 server is running DNSMASQ<br>
+The rest of the VM's are VM's from <a href="http://www.Vulnhub.com">www.Vulnhub.com</a>  </p>
 
 <hr>
 
 <h1>
 <a id="configuration-detials" class="anchor" href="#configuration-detials" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration detials</h1>
 
-<p>Each ESX host has 3 scripts running on it:
-    Revert_Snapshots.sh, Create_Snapshots.sh, Script.sh
-    All 3 are stored in the /root directory of the ESX host.
-The DHCP/Apache2 server has 2 scripts on it:
-    IP_TO_MAC.sh and Order.sh
-    Both are stored in the /root directory of the VM.</p>
+<p>Each ESX host has 3 scripts running on it:<br>
+    Revert_Snapshots.sh, Create_Snapshots.sh, Script.sh<br>
+    All 3 are stored in the /root directory of the ESX host.<br>
+The DHCP/Apache2 server has 2 scripts on it:<br>
+    IP_TO_MAC.sh and Order.sh<br>
+    Both are stored in the /root directory of the VM.  </p>
 
 <hr>
 
@@ -211,18 +199,15 @@ cat /root/MAC_ESX* &gt; /root/MAC
 <pre><code>#Runs every minute
 */1 * * * * /root/order.sh &gt;&gt; /root/order.log
 </code></pre>
-      </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Ollu-cybersaints-lab-documentation maintained by <a href="https://github.com/Ashkore">Ashkore</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/Ashkore/OLLU-AITP-Lab-Documentation">Ollu-cybersaints-lab-documentation</a> is maintained by <a href="https://github.com/Ashkore">Ashkore</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-    
+    </section>
 
+  
   </body>
 </html>
