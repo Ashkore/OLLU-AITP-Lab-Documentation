@@ -208,7 +208,8 @@ cat /root/MAC_ESX* &gt; /root/MAC
 /root/IP_TO_MAC.sh
 </code></pre>
 
-<p>crontab</p>
+<p>In order for the scp to work via crontab I did some sshkey-gen stuff that I will add later.
+crontab</p>
 
 <pre><code>#Runs every minute
 */1 * * * * /root/order.sh &gt;&gt; /root/order.log
